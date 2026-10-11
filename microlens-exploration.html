@@ -1,0 +1,173 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>데이터 탐색 및 전처리 | 조인혜</title><style>*{box-sizing:border-box}body{margin:0;background:#f7f7f3;color:#222;font-family:Arial,sans-serif;line-height:1.8}main{max-width:1050px;margin:auto;padding:45px 25px}a{color:inherit}nav{display:flex;justify-content:space-between;gap:15px;font-size:14px}h1{font-size:clamp(28px,5vw,44px);line-height:1.35;margin:35px 0 15px}.sub{color:#777;font-size:14px}.weeks{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:35px}.week{display:block;text-decoration:none;border:1px solid #ccc;padding:25px;transition:background .2s}.week:hover{background:#ecece7}.week h2{font-size:23px;margin:12px 0}.week p{color:#666;font-size:15px}.cell{margin-top:28px}.cell summary{cursor:pointer;font-size:13px;font-weight:bold;padding:8px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.65;background:#eee;padding:20px;margin:0;font-family:monospace}.output{background:white;color:#444;margin-top:8px}.output-label{font-size:12px;color:#777;margin-top:10px}.btn{display:inline-block;text-decoration:none;border:1px solid #222;padding:9px 16px;font-size:13px}.output-image{max-width:100%;height:auto}.paging{display:flex;gap:20px;margin-top:40px;flex-wrap:wrap}@media(max-width:650px){.weeks{grid-template-columns:1fr}pre{font-size:12px;padding:14px}nav{flex-wrap:wrap}}.group{margin-top:45px}.file{display:flex;justify-content:space-between;gap:20px;padding:17px 0;text-decoration:none;border-bottom:1px solid #ddd;overflow-wrap:anywhere}.file small{color:#777}.file:hover{color:#777}.links{display:flex;gap:15px;flex-wrap:wrap;margin:20px 0}.group h2{font-size:23px}</style></head><body><main><nav><a href="microlens.html">← 사회과학과 데이터 사이언스</a><a class="btn" href="microlens-files/microlens_.ipynb" download>노트북 다운로드 ↓</a></nav><h1>데이터 탐색 및 전처리</h1><details class="cell" open><summary>코드 1</summary><pre>import os, re, csv
+from collections import Counter
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+DATA_DIR = &quot;c:/Users/lava0/Desktop/한국외대/사회과학과 데이터 사이언스&quot;
+
+PAIRS = f&quot;{DATA_DIR}/MicroLens-100k_pairs.csv&quot;
+LIKES = f&quot;{DATA_DIR}/MicroLens-100k_likes_and_views.txt&quot;
+COMMENT = f&quot;{DATA_DIR}/MicroLens-100k_comment_en.txt&quot;
+TITLE = f&quot;{DATA_DIR}/MicroLens-100k_title_en.csv&quot;
+
+sns.set_theme(style=&quot;whitegrid&quot;, context=&quot;notebook&quot;)
+plt.rcParams[&quot;figure.dpi&quot;] = 100
+
+from matplotlib import font_manager
+_installed = {f.name for f in font_manager.fontManager.ttflist}
+
+for _cand in [&quot;NanumGothic&quot;, &quot;NanumSquareRound&quot;, &quot;NanumBarunGothic&quot;, &quot;Noto Sans CJK KR&quot;,
+&quot;Noto Sans CJK SC&quot;, &quot;Malgun Gothic&quot;, &quot;AppleGothic&quot;]:
+    if _cand in _installed:
+        plt.rcParams[&quot;font.family&quot;] = _cand
+        print(&quot;plot font:&quot;, _cand)
+        break
+else:
+    print(&quot;한글 폰트 찾지 못함&quot;)
+plt.rcParams[&quot;axes.unicode_minus&quot;] = False
+pd.set_option(&quot;display.max_colwidth&quot;, 120)
+pd.set_option(&quot;display.width&quot;, 160)
+
+for p in [PAIRS, LIKES, COMMENT, TITLE]:
+    print(f&quot;{os.path.basename(p):45s} {os.path.getsize(p)/1e6:8.1f} MB&quot;)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">plot font: NanumGothic
+MicroLens-100k_pairs.csv                          18.9 MB
+MicroLens-100k_likes_and_views.txt                 0.4 MB
+MicroLens-100k_comment_en.txt                     38.2 MB
+MicroLens-100k_title_en.csv                        1.5 MB
+</pre></details><details class="cell" open><summary>코드 2</summary><pre>pairs_raw = pd.read_csv(PAIRS)
+likes_raw = pd.read_csv(LIKES, sep=&quot;\t&quot;, header=None, names=[&quot;items&quot;, &quot;likes&quot;, &quot;views&quot; ])
+title_raw = pd.read_csv(TITLE, header=None, names=[&quot;items&quot;, &quot;title&quot;])
+title_raw.head()</pre><div class="output-label">저장된 실행 결과</div><pre class="output">   items                                             title
+0      1                             Gu long song gaga bad
+1      2   beautiful dish with 5 pounds of duck intestines
+2      3                              This sudden reversal
+3      4                     pumpkin play armor new outfit
+4      5                          the wife a day brush 200</pre></details><details class="cell" open><summary>코드 3</summary><pre>def quality_report(name, df, key_cols):
+    na = df.isna().sum()
+    rep = pd.DataFrame({&quot;결측치&quot; : na, &quot;결측치 비율(%)&quot; : (na/len(df)*100).round(3)})
+    print(f&quot;\n === {name} ({len(df) :,} 행) ===&quot;)
+    display(rep)
+    print(f&quot;완전 중복 행         : {df.duplicated().sum():,}&quot;)
+    print(f&quot;키 {key_cols} 중복 행 : {df.duplicated(subset=key_cols).sum():,}&quot;)
+
+
+quality_report(&quot;PAIRS&quot;, pairs_raw, [&quot;user&quot;, &quot;item&quot;])
+quality_report(&quot;LIKES&quot;, likes_raw, [&quot;items&quot;])
+quality_report(&quot;TITLE&quot;, title_raw, [&quot;items&quot;])</pre><div class="output-label">저장된 실행 결과</div><pre class="output">
+ === PAIRS (719,405 행) ===
+</pre><div class="output-label">저장된 실행 결과</div><pre class="output">           결측치  결측치 비율(%)
+user         0        0.0
+item         0        0.0
+timestamp    0        0.0</pre><div class="output-label">저장된 실행 결과</div><pre class="output">완전 중복 행         : 0
+키 [&#x27;user&#x27;, &#x27;item&#x27;] 중복 행 : 0
+
+ === LIKES (19,738 행) ===
+</pre><div class="output-label">저장된 실행 결과</div><pre class="output">       결측치  결측치 비율(%)
+items    0        0.0
+likes    0        0.0
+views    0        0.0</pre><div class="output-label">저장된 실행 결과</div><pre class="output">완전 중복 행         : 0
+키 [&#x27;items&#x27;] 중복 행 : 0
+
+ === TITLE (19,738 행) ===
+</pre><div class="output-label">저장된 실행 결과</div><pre class="output">       결측치  결측치 비율(%)
+items    0        0.0
+title    0        0.0</pre><div class="output-label">저장된 실행 결과</div><pre class="output">완전 중복 행         : 0
+키 [&#x27;items&#x27;] 중복 행 : 0
+</pre></details><details class="cell" open><summary>코드 4</summary><pre>pairs = pairs_raw.copy()
+pairs[&quot;datetime&quot;] = pd.to_datetime(pairs[&quot;timestamp&quot;], unit=&quot;ms&quot;)
+print(pairs.dtypes)
+pairs.head()</pre><div class="output-label">저장된 실행 결과</div><pre class="output">user                  int64
+item                  int64
+timestamp             int64
+datetime     datetime64[ms]
+dtype: object
+</pre><div class="output-label">저장된 실행 결과</div><pre class="output">    user  item      timestamp                datetime
+0  36121  9580  1583378629552 2020-03-05 03:23:49.552
+1  26572  9580  1583436719018 2020-03-05 19:31:59.018
+2  94805  9580  1584083806481 2020-03-13 07:16:46.481
+3  37550  9580  1584412681021 2020-03-17 02:38:01.021
+4  89825  9580  1584649439020 2020-03-19 20:23:59.020</pre></details><details class="cell" open><summary>코드 5</summary><pre>def percentile_level(s, labels=[&quot;하&quot;, &quot;중&quot;, &quot;상&quot;]):
+    &quot;&quot;&quot;값의 백분위(rank pct)에 따라 하/중/상 부여&quot;&quot;&quot;
+    pct = s.rank (pct=True, method=&quot;average&quot;)
+    return pd.cut(pct, bins=[0, 1/3, 2/3, 1], labels=labels, include_lowest=True)
+
+likes = likes_raw.copy()
+likes[&quot;likes_level&quot;] = percentile_level(likes[&quot;likes&quot;])
+likes[&quot;views_level&quot;] = percentile_level(likes[&quot;views&quot;])
+
+print(&quot;likes_level:&quot;, likes[&quot;likes_level&quot;].value_counts())
+print(&quot;views_level:&quot;, likes[&quot;views_level&quot;].value_counts())
+</pre><div class="output-label">저장된 실행 결과</div><pre class="output">likes_level: likes_level
+상    6633
+중    6566
+하    6539
+Name: count, dtype: int64
+views_level: views_level
+상    6580
+하    6579
+중    6579
+Name: count, dtype: int64
+</pre></details><details class="cell" open><summary>코드 6</summary><pre>merged = (
+    pairs
+    .merge(likes,left_on =&quot;item&quot;, right_on=&quot;items&quot;, how=&quot;left&quot;)
+    .merge(title_raw, left_on=&quot;items&quot;, right_on=&quot;items&quot;, how=&quot;left&quot;))
+
+print(f&quot;결합 결과: {merged.shape[0]:,} 행 x {merged.shape[1]:,} 열&quot;)
+merged.head(5)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">결합 결과: 719,405 행 x 10 열
+</pre><div class="output-label">저장된 실행 결과</div><pre class="output">    user  item      timestamp                datetime  items   likes    views likes_level views_level  \
+0  36121  9580  1583378629552 2020-03-05 03:23:49.552   9580  231000  2567000           상           상   
+1  26572  9580  1583436719018 2020-03-05 19:31:59.018   9580  231000  2567000           상           상   
+2  94805  9580  1584083806481 2020-03-13 07:16:46.481   9580  231000  2567000           상           상   
+3  37550  9580  1584412681021 2020-03-17 02:38:01.021   9580  231000  2567000           상           상   
+4  89825  9580  1584649439020 2020-03-19 20:23:59.020   9580  231000  2567000           상           상   
+
+                                                                       title  
+0   the best place to destroy the most wonderful team with the fastest speed  
+1   the best place to destroy the most wonderful team with the fastest speed  
+2   the best place to destroy the most wonderful team with the fastest speed  
+3   the best place to destroy the most wonderful team with the fastest speed  
+4   the best place to destroy the most wonderful team with the fastest speed  </pre></details><details class="cell" open><summary>코드 7</summary><pre>pairs_raw[&quot;datetime&quot;] = pd.to_datetime(
+    pairs_raw[&quot;timestamp&quot;],
+    unit=&quot;s&quot;
+)</pre></details><details class="cell" open><summary>코드 8</summary><pre>stats = likes[[&quot;likes&quot;, &quot;views&quot;]].agg([&quot;mean&quot;, &quot;median&quot;, &quot;min&quot;, &quot;max&quot;, &quot;var&quot;, &quot;std&quot;]).T
+print(stats)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">               mean    median      min         max           var           std
+likes  6.649281e+04   31000.0  10000.0   4731000.0  1.533383e+10  1.238298e+05
+views  2.000471e+06  977000.0  44000.0  93373000.0  1.218690e+13  3.490974e+06
+</pre></details><details class="cell" open><summary>코드 9</summary><pre>pairs_raw[&quot;datetime&quot;] = pd.to_datetime(pairs_raw[&quot;datetime&quot;])
+daily = pairs_raw.groupby(
+    pairs_raw[&quot;datetime&quot;].dt.date
+).size()
+
+daily.head()
+</pre><div class="output-label">저장된 실행 결과</div><pre class="output">---------------------------------------------------------------------------ValueError                                Traceback (most recent call last)Cell In[24], line 3
+      1 pairs_raw[&quot;datetime&quot;] = pd.to_datetime(pairs_raw[&quot;datetime&quot;])
+      2 daily = pairs_raw.groupby(
+----&gt; 3     pairs_raw[&quot;datetime&quot;].dt.date
+      4 ).size()
+      5 
+      6 daily.head()
+File ~\Desktop\한국외대\소셜데이터 프로그래밍 기초\.venv\Lib\site-packages\pandas\core\accessor.py:108, in PandasDelegate._add_delegate_accessors.&lt;locals&gt;._create_delegator_property.&lt;locals&gt;._getter(self)
+    107 def _getter(self):
+--&gt; 108     return self._delegate_property_get(name)
+File ~\Desktop\한국외대\소셜데이터 프로그래밍 기초\.venv\Lib\site-packages\pandas\core\indexes\accessors.py:96, in Properties._delegate_property_get(self, name)
+     92 from pandas import Series
+     94 values = self._get_values()
+---&gt; 96 result = getattr(values, name)
+     98 # maybe need to upcast (ints)
+     99 if isinstance(result, np.ndarray):
+File ~\Desktop\한국외대\소셜데이터 프로그래밍 기초\.venv\Lib\site-packages\pandas\core\indexes\extension.py:71, in _inherit_from_data.&lt;locals&gt;.fget(self)
+     70 def fget(self):
+---&gt; 71     result = getattr(self._data, name)
+     72     if wrap:
+     73         if isinstance(result, type(self._data)):
+File ~\Desktop\한국외대\소셜데이터 프로그래밍 기초\.venv\Lib\site-packages\pandas\core\arrays\datetimes.py:1552, in DatetimeArray.date(self)
+   1547 # If the Timestamps have a timezone that is not UTC,
+   1548 # convert them into their i8 representation while
+   1549 # keeping their timezone and not using UTC
+   1550 timestamps = self._local_timestamps()
+-&gt; 1552 return ints_to_pydatetime(timestamps, box=&quot;date&quot;, reso=self._creso)
+File pandas/_libs/tslibs/vectorized.pyx:183, in pandas._libs.tslibs.vectorized.ints_to_pydatetime()
+--&gt; 183 &#x27;Could not get source, probably due dynamically evaluated source code.&#x27;
+ValueError: year must be in 1..9999, not 52145</pre></details><details class="cell" open><summary>코드 10</summary><pre></pre></details><div class="paging"><a href="microlens.html">실습 목록으로 돌아가기</a></div></main></body></html>

@@ -1,0 +1,89 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Python 기초 | 조인혜</title><style>*{box-sizing:border-box}body{margin:0;background:#f7f7f3;color:#222;font-family:Arial,sans-serif;line-height:1.8}main{max-width:1050px;margin:auto;padding:45px 25px}a{color:inherit}nav{display:flex;justify-content:space-between;gap:15px;font-size:14px}h1{font-size:clamp(28px,5vw,44px);line-height:1.35;margin:35px 0 15px}.sub{color:#777;font-size:14px}.weeks{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:35px}.week{display:block;text-decoration:none;border:1px solid #ccc;padding:25px;transition:background .2s}.week:hover{background:#ecece7}.week h2{font-size:23px;margin:12px 0}.week p{color:#666;font-size:15px}.cell{margin-top:28px}.cell summary{cursor:pointer;font-size:13px;font-weight:bold;padding:8px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.65;background:#eee;padding:20px;margin:0;font-family:monospace}.output{background:white;color:#444;margin-top:8px}.output-label{font-size:12px;color:#777;margin-top:10px}.btn{display:inline-block;text-decoration:none;border:1px solid #222;padding:9px 16px;font-size:13px}.output-image{max-width:100%;height:auto}.paging{display:flex;gap:20px;margin-top:40px;flex-wrap:wrap}@media(max-width:650px){.weeks{grid-template-columns:1fr}pre{font-size:12px;padding:14px}nav{flex-wrap:wrap}}</style></head><body><main><nav><a href="course.html">← 주차별 실습 목록</a><a class="btn" href="notebooks/pb-week1.ipynb" download>노트북 다운로드 ↓</a></nav><h1>1주차 · Python 기초</h1><p>숫자, 자료형, 문자열 인덱싱·슬라이싱, 형 변환</p><details class="cell" open><summary>코드 1</summary><pre>#작성자: 조인혜
+#작성일: 2026.09.10
+#작성목적: 파이썬 기초 학습 - 숫자, 문자열, 자료형
+
+print(&#x27;Hello world&#x27;)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">Hello world
+</pre></details><details class="cell" open><summary>코드 2</summary><pre># 게시물의 좋아요 수를 계산합니다
+likes = 120
+print(likes + 5)
+print(&quot;좋아요&quot;)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">125
+좋아요
+</pre></details><details class="cell" open><summary>코드 3</summary><pre>print(2 + 3)
+print(&quot;2&quot; + &quot;3&quot;)
+print(&quot;2&quot;* 3)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">5
+23
+222
+</pre></details><details class="cell" open><summary>코드 4</summary><pre>age = 20
+print(age)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">20
+</pre></details><details class="cell" open><summary>코드 5</summary><pre>age = age + 1
+print(age)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">22
+</pre></details><details class="cell" open><summary>코드 6</summary><pre>print(type(20))
+print(type(&quot;안녕, 파이썬&quot;))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">&lt;class &#x27;int&#x27;&gt;
+&lt;class &#x27;str&#x27;&gt;
+</pre></details><details class="cell" open><summary>코드 7</summary><pre>a = &quot;안녕, 파이썬&quot;
+print(type(a))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">&lt;class &#x27;str&#x27;&gt;
+</pre></details><details class="cell" open><summary>코드 8</summary><pre>b = 2.0
+print(type(b))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">&lt;class &#x27;float&#x27;&gt;
+</pre></details><details class="cell" open><summary>코드 9</summary><pre>print(2 ** 10)
+print(6/2)
+print(3 + 0.5)
+print(2 + 2.0)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">1024
+3.0
+3.5
+4.0
+</pre></details><details class="cell" open><summary>코드 10</summary><pre>print(0.1 + 0.2)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">0.30000000000000004
+</pre></details><details class="cell" open><summary>코드 11</summary><pre>print(&quot;나이 : &quot; + 20)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">---------------------------------------------------------------------------TypeError                                 Traceback (most recent call last)Cell In[14], line 1
+----&gt; 1 print(&quot;나이 : &quot; + 20)
+TypeError: can only concatenate str (not &quot;int&quot;) to str</pre></details><details class="cell" open><summary>코드 12</summary><pre>print(len(&quot;Social AI&quot;))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">9
+</pre></details><details class="cell" open><summary>코드 13</summary><pre>print(&quot;12&quot; * 3)
+print(12 * 3)
+print(len(&quot;Social AI&quot;))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">121212
+36
+9
+</pre></details><details class="cell" open><summary>코드 14</summary><pre>s = &quot;Hello_World&quot;
+print(s[10])
+print(s[-1])
+print(s[11]) </pre><div class="output-label">저장된 실행 결과</div><pre class="output">d
+d
+</pre><div class="output-label">저장된 실행 결과</div><pre class="output">---------------------------------------------------------------------------IndexError                                Traceback (most recent call last)Cell In[18], line 4
+      1 s = &quot;Hello_World&quot;
+      2 print(s[10])
+      3 print(s[-1])
+----&gt; 4 print(s[11])
+IndexError: string index out of range</pre></details><details class="cell" open><summary>코드 15</summary><pre>s = &quot;Hello_World&quot;
+print(s[0:5])
+print(s[5:11])
+print(s[6:10]) </pre><div class="output-label">저장된 실행 결과</div><pre class="output">Hello
+_World
+Worl
+</pre></details><details class="cell" open><summary>코드 16</summary><pre>s = &quot;Hello_World&quot;
+print(s[:5])
+print(s[6:])
+print(s[::2]) 
+print(s[::-1])</pre><div class="output-label">저장된 실행 결과</div><pre class="output">Hello
+World
+HloWrd
+dlroW_olleH
+</pre></details><details class="cell" open><summary>코드 17</summary><pre>s = &quot;Seoul_2026&quot;
+print(s[::9])
+print(s[:5])
+print(s[6:10])</pre><div class="output-label">저장된 실행 결과</div><pre class="output">S6
+Seoul
+2026
+</pre></details><details class="cell" open><summary>코드 18</summary><pre>age=20
+print(&quot;Age: &quot; + str(age))
+print(f&quot;Age: {age}&quot;)
+
+print(type(age))
+age = str(age)
+print(type(age))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">Age: 20
+Age: 20
+&lt;class &#x27;int&#x27;&gt;
+&lt;class &#x27;str&#x27;&gt;
+</pre></details><details class="cell" open><summary>코드 19</summary><pre>age = 20
+print(&quot;Next year : {age + 1}&quot;)
+print(f&quot;Next year : {age + 1}&quot;)
+print(f&quot;Weeks : {365 / 7:.1f}&quot;)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">Next year : {age + 1}
+Next year : 21
+Weeks : 52.1
+</pre></details><div class="paging"><a href="course.html">실습 목록으로 돌아가기</a><a href="index.html#work">포트폴리오로 돌아가기</a></div></main></body></html>

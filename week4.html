@@ -1,0 +1,186 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>반복문과 문제 풀이 | 조인혜</title><style>*{box-sizing:border-box}body{margin:0;background:#f7f7f3;color:#222;font-family:Arial,sans-serif;line-height:1.8}main{max-width:1050px;margin:auto;padding:45px 25px}a{color:inherit}nav{display:flex;justify-content:space-between;gap:15px;font-size:14px}h1{font-size:clamp(28px,5vw,44px);line-height:1.35;margin:35px 0 15px}.sub{color:#777;font-size:14px}.weeks{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:35px}.week{display:block;text-decoration:none;border:1px solid #ccc;padding:25px;transition:background .2s}.week:hover{background:#ecece7}.week h2{font-size:23px;margin:12px 0}.week p{color:#666;font-size:15px}.cell{margin-top:28px}.cell summary{cursor:pointer;font-size:13px;font-weight:bold;padding:8px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.65;background:#eee;padding:20px;margin:0;font-family:monospace}.output{background:white;color:#444;margin-top:8px}.output-label{font-size:12px;color:#777;margin-top:10px}.btn{display:inline-block;text-decoration:none;border:1px solid #222;padding:9px 16px;font-size:13px}.output-image{max-width:100%;height:auto}.paging{display:flex;gap:20px;margin-top:40px;flex-wrap:wrap}@media(max-width:650px){.weeks{grid-template-columns:1fr}pre{font-size:12px;padding:14px}nav{flex-wrap:wrap}}</style></head><body><main><nav><a href="course.html">← 주차별 실습 목록</a><a class="btn" href="notebooks/pb-week5.ipynb" download>노트북 다운로드 ↓</a></nav><h1>4주차 · 반복문과 문제 풀이</h1><p>for·while, continue·break, 중첩 반복문, 최댓값과 소수 탐색</p><details class="cell" open><summary>코드 1</summary><pre>for i in range(1, 101):
+    if i%5==0:
+        print(i)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">5
+10
+15
+20
+25
+30
+35
+40
+45
+50
+55
+60
+65
+70
+75
+80
+85
+90
+95
+100
+</pre></details><details class="cell" open><summary>코드 2</summary><pre>for i in range(1,6):
+    if i == 3:
+        continue
+    print(i, end=&quot; &quot;)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">1 2 4 5 </pre></details><details class="cell" open><summary>코드 3</summary><pre>for i in range(1,6):
+    print(i, end=&quot; &quot;)
+    if i == 3:
+        continue
+</pre><div class="output-label">저장된 실행 결과</div><pre class="output">1 2 3 4 5 </pre></details><details class="cell" open><summary>코드 4</summary><pre>i = 5 
+while i &gt;0:
+    i -= 2
+    print(i)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">3
+1
+-1
+</pre></details><details class="cell" open><summary>코드 5</summary><pre>comment = &quot;굿 굿!&quot;
+for ch in comment:
+    print(&quot;[&quot;+ ch + &quot;]&quot;)
+print(len(comment))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[굿]
+[ ]
+[굿]
+[!]
+4
+</pre></details><details class="cell" open><summary>코드 6</summary><pre>answers = {&quot;찬성&quot; : 24, &quot;반대&quot; : 18, &quot;모름&quot; : 8}
+for option, count in answers.items():
+    print(f&quot;{option} : {count}명&quot;)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">찬성 : 24명
+반대 : 18명
+모름 : 8명
+</pre></details><details class="cell" open><summary>코드 7</summary><pre>likes = [80, 100, 120, 0, 200]
+total = 0
+for like in likes:
+    total += like
+print(total)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">500
+</pre></details><details class="cell" open><summary>코드 8</summary><pre>likes = [80, 100, 120, 0, 200]
+popular = []
+for like in likes:
+    if like &gt;= 100:
+        popular.append(like)
+print(popular)
+print(likes)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[100, 120, 200]
+[80, 100, 120, 0, 200]
+</pre></details><details class="cell" open><summary>코드 9</summary><pre>scores = [80, 90, 70, 95, 80]
+biggest = scores[0]
+
+for score in scores:
+    if score &gt; biggest:
+        biggest = score
+
+print(biggest) </pre><div class="output-label">저장된 실행 결과</div><pre class="output">95
+</pre></details><details class="cell" open><summary>코드 10</summary><pre>scores = [80, 90, 70, 95, 80]
+biggest = scores[0]
+second = scores[0]
+
+for score in scores:
+    if score &gt; biggest:
+        second = biggest
+        biggest = score
+
+
+print(second) </pre><div class="output-label">저장된 실행 결과</div><pre class="output">90
+</pre></details><details class="cell" open><summary>코드 11</summary><pre>for i in range(1,11):
+    for j in range(i):
+        print(&quot;*&quot;, end=&quot;&quot;)
+    print()</pre><div class="output-label">저장된 실행 결과</div><pre class="output">*
+**
+***
+****
+*****
+******
+*******
+********
+*********
+**********
+</pre></details><details class="cell" open><summary>코드 12</summary><pre>a = 12
+b = 18
+for i in range(1, min(a,b)+1):
+    if a % i == 0 and b % i == 0:
+        print(i, end=&quot; &quot;)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">1 2 3 6 </pre></details><details class="cell" open><summary>코드 13</summary><pre>a = 48
+b = 60
+l = []
+for i in range(1, max(a,b)+1):
+    if a % i ==0 or b % i ==0:
+        l.append(i)
+
+print(l)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">---------------------------------------------------------------------------TypeError                                 Traceback (most recent call last)Cell In[61], line 4
+      1 a = 48
+      2 b = 60
+      3 l = []
+----&gt; 4 for i in range(1, max(a,b)+1):
+      5     if a % i ==0 or b % i ==0:
+      6         l.append(i)
+      7 
+TypeError: &#x27;int&#x27; object is not callable</pre></details><details class="cell" open><summary>코드 14</summary><pre>for i in range(1,5):
+    for j in range(1, i+1):
+        print(j, end=&quot;&quot;)
+    print()</pre><div class="output-label">저장된 실행 결과</div><pre class="output">1
+12
+123
+1234
+</pre></details><details class="cell" open><summary>코드 15</summary><pre>likes = [45, 120, 80, 200, 150]
+max = likes[0]
+second = likes[0]
+
+for like in likes:
+    if like &gt; max:
+        second = max
+        max = like
+    elif like &gt; second and like != max:
+        second = like
+
+print(second)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">150
+</pre></details><details class="cell" open><summary>코드 16</summary><pre>limit = 100
+count = 0
+for i in range(2, limit+1):
+    for j in range(2, i):
+        if i%j == 0: 
+            break
+    else:
+        count += 1
+
+print(count)
+                </pre><div class="output-label">저장된 실행 결과</div><pre class="output">25
+</pre></details><details class="cell" open><summary>코드 17</summary><pre>limit = 100
+count = 0
+for i in range(2, limit+1):
+    is_prime = True
+    for j in range(2, i):
+        if i%j == 0: 
+            is_prime = False
+            break
+    if is_prime:
+        count += 1
+
+print(count)
+                </pre><div class="output-label">저장된 실행 결과</div><pre class="output">25
+</pre></details><details class="cell" open><summary>코드 18</summary><pre>a = 48
+b = 60
+l = []
+for i in range(1, max(a,b)+1):
+    if a % i ==0 and b % i ==0:
+        l.append(i)
+
+print(l)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">---------------------------------------------------------------------------TypeError                                 Traceback (most recent call last)Cell In[59], line 4
+      1 a = 48
+      2 b = 60
+      3 l = []
+----&gt; 4 for i in range(1, max(a,b)+1):
+      5     if a % i ==0 and b % i ==0:
+      6         l.append(i)
+      7 
+TypeError: &#x27;int&#x27; object is not callable</pre></details><details class="cell" open><summary>코드 19</summary><pre>a = 48
+b = 60
+l = []
+for i in range(1, max(a,b)+1):
+    if a % i ==0 and b % i ==0:
+        l.append(i)
+
+print(l)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">---------------------------------------------------------------------------TypeError                                 Traceback (most recent call last)Cell In[60], line 4
+      1 a = 48
+      2 b = 60
+      3 l = []
+----&gt; 4 for i in range(1, max(a,b)+1):
+      5     if a % i ==0 and b % i ==0:
+      6         l.append(i)
+      7 
+TypeError: &#x27;int&#x27; object is not callable</pre></details><div class="paging"><a href="course.html">실습 목록으로 돌아가기</a><a href="index.html#work">포트폴리오로 돌아가기</a></div></main></body></html>

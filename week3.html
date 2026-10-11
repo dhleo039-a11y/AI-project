@@ -1,0 +1,119 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>자료구조와 연산 | 조인혜</title><style>*{box-sizing:border-box}body{margin:0;background:#f7f7f3;color:#222;font-family:Arial,sans-serif;line-height:1.8}main{max-width:1050px;margin:auto;padding:45px 25px}a{color:inherit}nav{display:flex;justify-content:space-between;gap:15px;font-size:14px}h1{font-size:clamp(28px,5vw,44px);line-height:1.35;margin:35px 0 15px}.sub{color:#777;font-size:14px}.weeks{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:35px}.week{display:block;text-decoration:none;border:1px solid #ccc;padding:25px;transition:background .2s}.week:hover{background:#ecece7}.week h2{font-size:23px;margin:12px 0}.week p{color:#666;font-size:15px}.cell{margin-top:28px}.cell summary{cursor:pointer;font-size:13px;font-weight:bold;padding:8px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.65;background:#eee;padding:20px;margin:0;font-family:monospace}.output{background:white;color:#444;margin-top:8px}.output-label{font-size:12px;color:#777;margin-top:10px}.btn{display:inline-block;text-decoration:none;border:1px solid #222;padding:9px 16px;font-size:13px}.output-image{max-width:100%;height:auto}.paging{display:flex;gap:20px;margin-top:40px;flex-wrap:wrap}@media(max-width:650px){.weeks{grid-template-columns:1fr}pre{font-size:12px;padding:14px}nav{flex-wrap:wrap}}</style></head><body><main><nav><a href="course.html">← 주차별 실습 목록</a><a class="btn" href="notebooks/pb-week3.ipynb" download>노트북 다운로드 ↓</a></nav><h1>3주차 · 자료구조와 연산</h1><p>리스트, 튜플, 딕셔너리, 집합의 기초 연산</p><details class="cell" open><summary>코드 1</summary><pre>#작성일 : 2026.09.17
+#작성목적 : 자료형과 연산자
+
+likes= [120,80,200,150]
+print(likes)
+print(len(likes))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[120, 80, 200, 150]
+4
+</pre></details><details class="cell" open><summary>코드 2</summary><pre>likes= [120,80,200,150]
+likes[1]= 90
+likes.append(60)
+print(likes)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[120, 90, 200, 150, 60]
+</pre></details><details class="cell" open><summary>코드 3</summary><pre>likes= [120,90,200,150, 60]
+likes.remove(90)
+last = likes.pop()
+print(last)
+print(likes)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">60
+[120, 200, 150]
+</pre></details><details class="cell" open><summary>코드 4</summary><pre>likes= [120,80,200,150]
+total = sum(likes)
+mean=total/len(likes)
+print(total)
+print(mean)
+print(min(likes), max(likes))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">550
+137.5
+80 200
+</pre></details><details class="cell" open><summary>코드 5</summary><pre>likes= [120,80,200,150]
+ranked = sorted(likes, reverse=True)
+print(ranked)
+print(likes)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[200, 150, 120, 80]
+[120, 80, 200, 150]
+</pre></details><details class="cell" open><summary>코드 6</summary><pre>likes= [120,80,200,150]
+result = likes.sort()
+print(likes)
+print(result)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[80, 120, 150, 200]
+None
+</pre></details><details class="cell" open><summary>코드 7</summary><pre>a= [120, 80]
+b=a
+b.append(200)
+print(a)
+print(b)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[120, 80, 200]
+[120, 80, 200]
+</pre></details><details class="cell" open><summary>코드 8</summary><pre>a=[120, 80]
+b=a.copy()
+b.append(200)
+print(a)
+print(b)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[120, 80]
+[120, 80, 200]
+</pre></details><details class="cell" open><summary>코드 9</summary><pre>likes= [120,80,200,150]
+</pre></details><details class="cell" open><summary>코드 10</summary><pre>likes[1] = 90
+likes.append(60)
+ranked = sorted(likes, reverse=True)
+print(likes)
+print(ranked)
+print(sum(likes)/len(likes))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[120, 90, 200, 150, 60]
+[200, 150, 120, 90, 60]
+124.0
+</pre></details><details class="cell" open><summary>코드 11</summary><pre>#튜플
+info = (&#x27;Seoul&#x27;, 2026)
+print(info[0])
+print(info[1])
+single = (&quot;seoul&quot;, )
+print(type(single))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">Seoul
+2026
+&lt;class &#x27;tuple&#x27;&gt;
+</pre></details><details class="cell" open><summary>코드 12</summary><pre>info = (&#x27;Seoul&#x27;, 2026)
+city, year = info
+print(city)
+print(year)
+print(f&quot;{city}_{year}&quot;)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">Seoul
+2026
+Seoul_2026
+</pre></details><details class="cell" open><summary>코드 13</summary><pre>info = (&quot;Busan&quot;, 2027)
+city, year = info
+print(f&quot;{city}_{year}&quot;)
+</pre><div class="output-label">저장된 실행 결과</div><pre class="output">Busan_2027
+</pre></details><details class="cell" open><summary>코드 14</summary><pre>post = {&quot;author&quot; : &quot;mina&quot;,
+        &quot;likes&quot; : 120, &quot;views&quot; : 1600}
+post[&quot;likes&quot;] = 125
+post[&quot;comment&quot;] = 8
+print(post[&quot;likes&quot;])
+print(len(post))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">125
+4
+</pre></details><details class="cell" open><summary>코드 15</summary><pre>post = {&quot;author&quot; : &quot;mina&quot;,
+        &quot;likes&quot; : 120, 
+        &quot;views&quot; : 1600
+}
+print(post.get(&quot;shares&quot;, 0))
+print(&quot;shares&quot; in post)</pre><div class="output-label">저장된 실행 결과</div><pre class="output">0
+False
+</pre></details><details class="cell" open><summary>코드 16</summary><pre>post = {&quot;author&quot; : &quot;mina&quot;,
+        &quot;likes&quot; : 120, 
+        &quot;views&quot; : 1600
+}
+print(list(post.keys()))
+print(list(post.values()))
+print(list(post.items()))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[&#x27;author&#x27;, &#x27;likes&#x27;, &#x27;views&#x27;]
+[&#x27;mina&#x27;, 120, 1600]
+[(&#x27;author&#x27;, &#x27;mina&#x27;), (&#x27;likes&#x27;, 120), (&#x27;views&#x27;, 1600)]
+</pre></details><details class="cell" open><summary>코드 17</summary><pre>tags = [
+    &quot;python&quot;, &quot;data&quot;,
+    &quot;python&quot;, &quot;survey&quot;
+]
+unique_tags = set(tags)
+print(sorted(unique_tags))
+print(len(unique_tags))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[&#x27;data&#x27;, &#x27;python&#x27;, &#x27;survey&#x27;]
+3
+</pre></details><details class="cell" open><summary>코드 18</summary><pre>a = {&quot;python&quot;, &quot;data&quot;, &quot;survey&quot;}
+b = {&quot;data&quot;, &quot;ai&quot;}
+print(sorted(a &amp; b))
+print(sorted(a | b))
+print(sorted(a - b))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[&#x27;data&#x27;]
+[&#x27;ai&#x27;, &#x27;data&#x27;, &#x27;python&#x27;, &#x27;survey&#x27;]
+[&#x27;python&#x27;, &#x27;survey&#x27;]
+</pre></details><details class="cell" open><summary>코드 19</summary><pre>a = {&quot;python&quot;, &quot;data&quot;, &quot;survey&quot;}
+b = {&quot;python&quot;, &quot;ai&quot;, &quot;survey&quot;}
+print(sorted(a &amp; b))
+print(sorted(a - b))</pre><div class="output-label">저장된 실행 결과</div><pre class="output">[&#x27;python&#x27;, &#x27;survey&#x27;]
+[&#x27;data&#x27;]
+</pre></details><div class="paging"><a href="course.html">실습 목록으로 돌아가기</a><a href="index.html#work">포트폴리오로 돌아가기</a></div></main></body></html>
